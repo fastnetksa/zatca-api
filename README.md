@@ -15,8 +15,9 @@ PHP library for seamless integration with the ZATCA (Zakat, Tax and Customs Auth
 ---
 
 ## Installation
-
-    composer require sevaske/zatca-api
+```bash
+composer require sevaske/zatca-api
+```
 
 ---
 
