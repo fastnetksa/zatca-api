@@ -2,7 +2,7 @@
 
 namespace Sevaske\ZatcaApi\Responses;
 
-class RenewalProductionCertificate extends ProductionCertificate
+class RenewalProductionCertificateResponse extends ProductionCertificateResponse
 {
     public function tokenType(): ?string
     {

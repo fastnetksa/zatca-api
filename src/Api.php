@@ -12,8 +12,8 @@ use Sevaske\ZatcaApi\Responses\CertificateResponse;
 use Sevaske\ZatcaApi\Responses\ClearanceResponse;
 use Sevaske\ZatcaApi\Responses\ComplianceCertificateResponse;
 use Sevaske\ZatcaApi\Responses\ComplianceResponse;
-use Sevaske\ZatcaApi\Responses\ProductionCertificate;
-use Sevaske\ZatcaApi\Responses\RenewalProductionCertificate;
+use Sevaske\ZatcaApi\Responses\ProductionCertificateResponse;
+use Sevaske\ZatcaApi\Responses\RenewalProductionCertificateResponse;
 use Sevaske\ZatcaApi\Responses\ReportingResponse;
 use Sevaske\ZatcaApi\Traits\RequestBuilder;
 
@@ -57,12 +57,12 @@ class Api
      */
     public function reporting(string $signedInvoice, string $invoiceHash, string $uuid, bool $clearanceStatus = true): ReportingResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Reporting->value,
             payload: [
+                'invoice' => base64_encode($signedInvoice),
                 'invoiceHash' => $invoiceHash,
                 'uuid' => $uuid,
-                'invoice' => base64_encode($signedInvoice),
             ],
             headers: [
                 'Clearance-Status' => $clearanceStatus ? 1 : 0,
@@ -70,8 +70,15 @@ class Api
             authToken: true,
             method: 'POST',
         );
+        $response = new ReportingResponse($rawResponse);
 
-        return new ReportingResponse($response);
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
@@ -80,12 +87,12 @@ class Api
      */
     public function clearance(string $signedInvoice, string $invoiceHash, string $uuid, bool $clearanceStatus = true): ClearanceResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Clearance->value,
             payload: [
+                'invoice' => base64_encode($signedInvoice),
                 'invoiceHash' => $invoiceHash,
                 'uuid' => $uuid,
-                'invoice' => base64_encode($signedInvoice),
             ],
             headers: [
                 'Clearance-Status' => $clearanceStatus ? 1 : 0,
@@ -93,8 +100,15 @@ class Api
             authToken: true,
             method: 'POST',
         );
+        $response = new ClearanceResponse($rawResponse);
 
-        return new ClearanceResponse($response);
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
@@ -105,7 +119,7 @@ class Api
      */
     public function compliance(string $signedInvoice, string $invoiceHash, string $uuid): ComplianceResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Compliance->value,
             payload: [
                 'invoiceHash' => $invoiceHash,
@@ -116,7 +130,15 @@ class Api
             method: 'POST',
         );
 
-        return new ComplianceResponse($response);
+        $response = new ComplianceResponse($rawResponse);
+
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
@@ -126,14 +148,21 @@ class Api
      */
     public function complianceCertificate(string $csr, string $otp): CertificateResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::ComplianceCertificate->value,
             payload: ['csr' => base64_encode($csr)],
             headers: ['OTP' => $otp],
             authToken: false,
         );
+        $response = new ComplianceCertificateResponse($rawResponse);
 
-        return new ComplianceCertificateResponse($response);
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
@@ -141,15 +170,23 @@ class Api
      * @throws ZatcaResponseException
      * @throws ZatcaRequestException
      */
-    public function productionCertificate(string $complianceRequestId): ProductionCertificate
+    public function productionCertificate(string $complianceRequestId): ProductionCertificateResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::ProductionCertificate->value,
             payload: ['compliance_request_id' => $complianceRequestId],
             authToken: true,
         );
 
-        return new ProductionCertificate($response);
+        $response = new ProductionCertificateResponse($rawResponse);
+
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 
     /**
@@ -157,15 +194,23 @@ class Api
      * @throws ZatcaResponseException
      * @throws ZatcaRequestException
      */
-    public function renewProductionCertificate(string $csr, string $otp): RenewalProductionCertificate
+    public function renewProductionCertificate(string $csr, string $otp): RenewalProductionCertificateResponse
     {
-        $response = $this->request(
+        $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::ProductionCertificate->value,
             payload: ['csr' => base64_encode($csr)],
             headers: ['OTP' => $otp],
             authToken: false,
         );
 
-        return new RenewalProductionCertificate($response);
+        $response = new RenewalProductionCertificateResponse($rawResponse);
+
+        if ($response->errors()) {
+            throw new ZatcaRequestException('Request failed.', [
+                'errors' => $response->errors(),
+            ]);
+        }
+
+        return $response;
     }
 }

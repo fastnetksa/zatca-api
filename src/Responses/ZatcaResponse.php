@@ -33,6 +33,11 @@ class ZatcaResponse implements ZatcaResponseInterface
         return $this->response;
     }
 
+    public function errors(): array
+    {
+        return [];
+    }
+
     /**
      * Parses the PSR-7 response and returns an associative array of its JSON contents.
      *
