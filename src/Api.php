@@ -55,13 +55,13 @@ class Api
     /**
      * @throws ZatcaRequestException|ZatcaException
      */
-    public function reporting(string $signedInvoice, string $invoiceHash, string $uuid, bool $clearanceStatus = true): ReportingResponse
+    public function reporting(string $signedInvoice, ?string $invoiceHash, string $uuid, bool $clearanceStatus = true): ReportingResponse
     {
         $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Reporting->value,
             payload: [
                 'invoice' => base64_encode($signedInvoice),
-                'invoiceHash' => $invoiceHash,
+                'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
                 'uuid' => $uuid,
             ],
             headers: [
@@ -85,13 +85,13 @@ class Api
      * @throws ZatcaException
      * @throws ZatcaRequestException
      */
-    public function clearance(string $signedInvoice, string $invoiceHash, string $uuid, bool $clearanceStatus = true): ClearanceResponse
+    public function clearance(string $signedInvoice, ?string $invoiceHash, string $uuid, bool $clearanceStatus = true): ClearanceResponse
     {
         $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Clearance->value,
             payload: [
                 'invoice' => base64_encode($signedInvoice),
-                'invoiceHash' => $invoiceHash,
+                'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
                 'uuid' => $uuid,
             ],
             headers: [
@@ -117,14 +117,14 @@ class Api
      * @throws ZatcaException
      * @throws ZatcaRequestException
      */
-    public function compliance(string $signedInvoice, string $invoiceHash, string $uuid): ComplianceResponse
+    public function compliance(string $signedInvoice, ?string $invoiceHash, string $uuid): ComplianceResponse
     {
         $rawResponse = $this->request(
             endpoint: ZatcaEndpointEnum::Compliance->value,
             payload: [
-                'invoiceHash' => $invoiceHash,
-                'uuid' => $uuid,
                 'invoice' => base64_encode($signedInvoice),
+                'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
+                'uuid' => $uuid,
             ],
             authToken: true,
             method: 'POST',
@@ -212,5 +212,10 @@ class Api
         }
 
         return $response;
+    }
+
+    private function normalizeInvoiceHash(?string $invoiceHash): string
+    {
+        return $invoiceHash ?: base64_encode('0');
     }
 }
