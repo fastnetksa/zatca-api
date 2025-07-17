@@ -48,12 +48,17 @@ class ZatcaResponse implements ZatcaResponseInterface
      */
     public static function parse(ResponseInterface $response): array
     {
-        $content = $response->getBody()->getContents();
+        $body = $response->getBody();
+
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
+        $content = $body->getContents();
         $parsed = json_decode($content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw (new ZatcaResponseException)->withContext([
-                'message' => json_last_error_msg(),
+            throw new ZatcaResponseException(json_last_error_msg(), [
                 'content' => $content,
                 'status' => $response->getStatusCode(),
             ]);
