@@ -1,6 +1,6 @@
 # ZATCA API PHP Client
 
-PHP library for seamless integration with the ZATCA (Zakat, Tax and Customs Authority) e-invoicing API, enabling invoice reporting, clearance checks, compliance verification, and certificate management.
+This is a simple PHP library to work with the ZATCA API. You can send invoice data, check invoice status, verify compliance, and manage certificates easily.
 
 ---
 
