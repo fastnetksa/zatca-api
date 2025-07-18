@@ -1,6 +1,16 @@
+<p align="center">
+<img src="https://badgen.net/packagist/php/sevaske/zatca-api" alt="php Vers ion">
+<a href="https://packagist.org/packages/sevaske/zatca-api"><img alt="Packagist Stars" src="https://img.shields.io/packagist/stars/sevaske/zatca-api"></a>
+<a href="https://packagist.org/packages/sevaske/zatca-api"><img alt="Packagist Downloads" src="https://img.shields.io/packagist/dt/sevaske/zatca-api"></a>
+<a href="https://packagist.org/packages/sevaske/zatca-api"><img alt="Packagist Version" src="https://img.shields.io/packagist/v/sevaske/zatca-api"></a>
+<a href="https://packagist.org/packages/sevaske/zatca-api"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+</p>
+
 # ZATCA API PHP Client
 
-PHP library for seamless integration with the ZATCA (Zakat, Tax and Customs Authority) e-invoicing API, enabling invoice reporting, clearance checks, compliance verification, and certificate management.
+This is a simple PHP library to work with the ZATCA API. You can send invoice data, check invoice status, verify compliance, and manage certificates easily.
+
+If you’re looking for a library to generate XML invoices, you can use this one: https://github.com/sevaske/php-zatca-xml
 
 ---
 
