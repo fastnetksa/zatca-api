@@ -22,14 +22,12 @@ If you’re looking for a library to generate XML invoices, you can use this one
 - Environment support: sandbox, simulation, production
 - Uses any PSR-18 compatible HTTP client (e.g., Guzzle)
 
----
 
 ## Installation
 ```bash
 composer require sevaske/zatca-api
 ```
 
----
 
 ## Quick Start
 
@@ -96,7 +94,6 @@ try {
 }
 ```
 
----
 
 ## Available Methods
 
@@ -109,7 +106,6 @@ try {
 | `productionCertificate()`  | Obtain production certificate                      |
 | `renewProductionCertificate()` | Renew production certificate                    |
 
----
 
 ## Exception handling
 
@@ -119,4 +115,3 @@ The library throws the following exceptions which you can catch and handle:
 - `ZatcaRequestException` — errors during the HTTP request
 - `ZatcaResponseException` — errors processing the API response
 
----
