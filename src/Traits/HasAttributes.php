@@ -25,10 +25,10 @@ trait HasAttributes
     /**
      * Magic method to set the value of a dynamic attribute.
      *
-     * @param  string  $name  The name of the attribute.
-     * @param  mixed  $value  The value to assign to the attribute.
+     * @param  string $name  The name of the attribute.
+     * @param  mixed  $value The value to assign to the attribute.
      */
-    public function __set(string $name, mixed $value)
+    public function __set(string $name, $value)
     {
         $this->attributes[$name] = $value;
     }
@@ -57,12 +57,12 @@ trait HasAttributes
     /**
      * Retrieves an attribute value.
      *
-     * @param  string  $key  The attribute key.
-     * @return mixed The attribute value.
+     * @param  string $key The attribute key.
+     * @return mixed       The attribute value.
      *
      * @throws InvalidArgumentException
      */
-    protected function getAttribute(string $key): mixed
+    protected function getAttribute(string $key)
     {
         if (! isset($this->attributes[$key])) {
             throw new InvalidArgumentException('Undefined attribute: '.$key);
@@ -74,10 +74,10 @@ trait HasAttributes
     /**
      * Retrieves an attribute value or null if undefined.
      *
-     * @param  string  $key  The attribute key.
+     * @param  string $key The attribute key.
      * @return mixed|null The attribute value or null if not found.
      */
-    protected function getOptionalAttribute(string $key): mixed
+    protected function getOptionalAttribute(string $key)
     {
         return $this->attributes[$key] ?? null;
     }
@@ -85,10 +85,10 @@ trait HasAttributes
     /**
      * Checks whether the given offset exists in the internal attributes.
      *
-     * @param  mixed  $offset  The attribute key.
+     * @param  mixed $offset The attribute key.
      * @return bool True if set, false otherwise.
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists($offset): bool
     {
         return isset($this->attributes[$offset]);
     }
@@ -96,10 +96,10 @@ trait HasAttributes
     /**
      * Retrieves a value by array key (offset).
      *
-     * @param  mixed  $offset  The attribute key.
+     * @param  mixed $offset The attribute key.
      * @return mixed|null The attribute value, or null if not set.
      */
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet($offset)
     {
         return $this->attributes[$offset] ?? null;
     }
@@ -107,10 +107,10 @@ trait HasAttributes
     /**
      * Sets a value by array key (offset).
      *
-     * @param  mixed  $offset  The attribute key.
-     * @param  mixed  $value  The value to set.
+     * @param  mixed $offset The attribute key.
+     * @param  mixed $value  The value to set.
      */
-    public function offsetSet(mixed $offset, mixed $value): void
+    public function offsetSet($offset, $value): void
     {
         $this->attributes[$offset] = $value;
     }
@@ -118,9 +118,9 @@ trait HasAttributes
     /**
      * Unsets a value by array key (offset).
      *
-     * @param  mixed  $offset  The attribute key.
+     * @param  mixed $offset The attribute key.
      */
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset($offset): void
     {
         unset($this->attributes[$offset]);
     }

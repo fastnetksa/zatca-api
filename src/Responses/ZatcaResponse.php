@@ -13,14 +13,21 @@ class ZatcaResponse implements ZatcaResponseInterface
     use HasAttributes;
 
     /**
+     * @var ResponseInterface|array
+     */
+    protected $response;
+
+    /**
      * Constructs the ApiResponse object by parsing a PSR-7 response into attributes.
      *
-     * @param  ResponseInterface|array  $response  The original PSR-7 HTTP response OR array.
+     * @param  ResponseInterface|array $response The original PSR-7 HTTP response OR array.
      *
      * @throws ZatcaException If the response body cannot be parsed as valid JSON.
      */
-    public function __construct(protected ResponseInterface|array $response)
+    public function __construct($response)
     {
+        $this->response = $response;
+
         if ($response instanceof ResponseInterface) {
             $this->attributes = self::parse($response);
         } else {
@@ -28,7 +35,10 @@ class ZatcaResponse implements ZatcaResponseInterface
         }
     }
 
-    public function raw(): ResponseInterface|array
+    /**
+     * @return ResponseInterface|array
+     */
+    public function raw()
     {
         return $this->response;
     }

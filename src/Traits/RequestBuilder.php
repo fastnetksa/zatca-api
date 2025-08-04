@@ -60,11 +60,11 @@ trait RequestBuilder
     /**
      * Core request handling with Guzzle.
      *
-     * @param  string  $endpoint  API endpoint.
-     * @param  array  $headers  Additional headers.
-     * @param  array  $payload  Request payload.
-     * @param  bool|AuthToken  $authToken  To add the auth token.
-     * @param  string  $method  HTTP method.
+     * @param  string        $endpoint   API endpoint.
+     * @param  array         $payload    Request payload.
+     * @param  array         $headers    Additional headers.
+     * @param  bool|AuthToken $authToken To add the auth token.
+     * @param  string        $method     HTTP method.
      * @return ResponseInterface Response.
      *
      * @throws ZatcaRequestException|ZatcaResponseException
@@ -73,8 +73,8 @@ trait RequestBuilder
         string $endpoint = '',
         array $payload = [],
         array $headers = [],
-        bool|AuthToken $authToken = false,
-        string $method = 'POST',
+        $authToken = false,
+        string $method = 'POST'
     ): ResponseInterface {
         $headers = array_merge([
             'Accept' => 'application/json',

@@ -30,24 +30,20 @@ class Api
     /**
      * Initialize the API request with an HTTP client.
      *
-     * @param  ZatcaEnvironmentEnum|string  $environment  The environment to make requests (production|emulation|sandbox).
-     * @param  ClientInterface  $httpClient  The HTTP client for sending requests.
-     * @param  ?string  $certificate  The certificate for auth.
-     * @param  ?string  $secret  The secret of the certificate for auth.
+     * @param ZatcaEnvironmentEnum|string $environment The environment to make requests (production|simulation|sandbox).
+     * @param ClientInterface             $httpClient   The HTTP client for sending requests.
+     * @param string|null                 $certificate  The certificate for auth.
+     * @param string|null                 $secret       The secret of the certificate for auth.
      */
-    public function __construct(
-        ZatcaEnvironmentEnum|string $environment,
-        ClientInterface $httpClient,
-        ?string $certificate = null,
-        ?string $secret = null,
-    ) {
+    public function __construct($environment, ClientInterface $httpClient, ?string $certificate = null, ?string $secret = null)
+    {
         if (is_string($environment)) {
             $environment = ZatcaEnvironmentEnum::from($environment);
         }
 
         $this->environment = $environment;
-        $this->baseUrl = $environment->url();
-        $this->httpClient = $httpClient;
+        $this->baseUrl     = $environment->url();
+        $this->httpClient  = $httpClient;
 
         $this->setCredentials($certificate, $secret);
     }
@@ -58,17 +54,17 @@ class Api
     public function reporting(string $signedInvoice, ?string $invoiceHash, string $uuid, bool $clearanceStatus = true): ReportingResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::Reporting->value,
-            payload: [
+            ZatcaEndpointEnum::REPORTING,
+            [
                 'invoice' => base64_encode($signedInvoice),
                 'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
                 'uuid' => $uuid,
             ],
-            headers: [
+            [
                 'Clearance-Status' => $clearanceStatus ? 1 : 0,
             ],
-            authToken: true,
-            method: 'POST',
+            true,
+            'POST'
         );
         $response = new ReportingResponse($rawResponse);
 
@@ -88,17 +84,17 @@ class Api
     public function clearance(string $signedInvoice, ?string $invoiceHash, string $uuid, bool $clearanceStatus = true): ClearanceResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::Clearance->value,
-            payload: [
+            ZatcaEndpointEnum::CLEARANCE,
+            [
                 'invoice' => base64_encode($signedInvoice),
                 'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
                 'uuid' => $uuid,
             ],
-            headers: [
+            [
                 'Clearance-Status' => $clearanceStatus ? 1 : 0,
             ],
-            authToken: true,
-            method: 'POST',
+            true,
+            'POST'
         );
         $response = new ClearanceResponse($rawResponse);
 
@@ -120,14 +116,15 @@ class Api
     public function compliance(string $signedInvoice, ?string $invoiceHash, string $uuid): ComplianceResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::Compliance->value,
-            payload: [
+            ZatcaEndpointEnum::COMPLIANCE,
+            [
                 'invoice' => base64_encode($signedInvoice),
                 'invoiceHash' => $this->normalizeInvoiceHash($invoiceHash),
                 'uuid' => $uuid,
             ],
-            authToken: true,
-            method: 'POST',
+            [],
+            true,
+            'POST'
         );
 
         $response = new ComplianceResponse($rawResponse);
@@ -149,10 +146,11 @@ class Api
     public function complianceCertificate(string $csr, string $otp): CertificateResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::ComplianceCertificate->value,
-            payload: ['csr' => base64_encode($csr)],
-            headers: ['OTP' => $otp],
-            authToken: false,
+            ZatcaEndpointEnum::COMPLIANCE_CERTIFICATE,
+            ['csr' => base64_encode($csr)],
+            ['OTP' => $otp],
+            false,
+            'POST'
         );
         $response = new ComplianceCertificateResponse($rawResponse);
 
@@ -173,9 +171,11 @@ class Api
     public function productionCertificate(string $complianceRequestId): ProductionCertificateResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::ProductionCertificate->value,
-            payload: ['compliance_request_id' => $complianceRequestId],
-            authToken: true,
+            ZatcaEndpointEnum::PRODUCTION_CERTIFICATE,
+            ['compliance_request_id' => $complianceRequestId],
+            [],
+            true,
+            'POST'
         );
 
         $response = new ProductionCertificateResponse($rawResponse);
@@ -197,10 +197,11 @@ class Api
     public function renewProductionCertificate(string $csr, string $otp): RenewalProductionCertificateResponse
     {
         $rawResponse = $this->request(
-            endpoint: ZatcaEndpointEnum::ProductionCertificate->value,
-            payload: ['csr' => base64_encode($csr)],
-            headers: ['OTP' => $otp],
-            authToken: false,
+            ZatcaEndpointEnum::PRODUCTION_CERTIFICATE,
+            ['csr' => base64_encode($csr)],
+            ['OTP' => $otp],
+            false,
+            'POST'
         );
 
         $response = new RenewalProductionCertificateResponse($rawResponse);

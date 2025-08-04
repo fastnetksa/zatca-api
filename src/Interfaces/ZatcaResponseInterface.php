@@ -13,7 +13,7 @@ interface ZatcaResponseInterface extends ArrayAccess, JsonSerializable
      *
      * @return ResponseInterface|array The raw response.
      */
-    public function raw(): ResponseInterface|array;
+    public function raw();
 
     public function errors(): array;
 }

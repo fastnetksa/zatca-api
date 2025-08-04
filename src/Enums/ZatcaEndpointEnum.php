@@ -2,15 +2,25 @@
 
 namespace Sevaske\ZatcaApi\Enums;
 
-enum ZatcaEndpointEnum: string
+class ZatcaEndpointEnum
 {
-    case Reporting = 'invoices/reporting/single';
+    public const REPORTING = 'invoices/reporting/single';
+    public const CLEARANCE = 'invoices/clearance/single';
+    public const COMPLIANCE = 'compliance/invoices';
+    public const COMPLIANCE_CERTIFICATE = 'compliance';
+    public const PRODUCTION_CERTIFICATE = 'production/csids';
 
-    case Clearance = 'invoices/clearance/single';
-
-    case Compliance = 'compliance/invoices';
-
-    case ComplianceCertificate = 'compliance';
-
-    case ProductionCertificate = 'production/csids';
+    /**
+     * @return string[]
+     */
+    public static function values(): array
+    {
+        return [
+            self::REPORTING,
+            self::CLEARANCE,
+            self::COMPLIANCE,
+            self::COMPLIANCE_CERTIFICATE,
+            self::PRODUCTION_CERTIFICATE,
+        ];
+    }
 }

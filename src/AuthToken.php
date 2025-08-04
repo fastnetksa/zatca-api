@@ -8,14 +8,27 @@ class AuthToken
     private string $token;
 
     /**
+     * @var string
+     */
+    protected $certificate;
+
+    /**
+     * @var string
+     */
+    protected $secret;
+
+    /**
      * Constructor accepts a certificate and a secret,
      * then generates a token in the format base64(base64(certificate):secret)
      *
      * @param  string  $certificate  - The certificate string
-     * @param  string  $secret  - The secret key
+     * @param  string  $secret       - The secret key
      */
-    public function __construct(protected string $certificate, protected string $secret)
+    public function __construct(string $certificate, string $secret)
     {
+        $this->certificate = $certificate;
+        $this->secret      = $secret;
+
         // Trim inputs, double base64 encode the certificate,
         // concatenate with secret separated by ':', then base64 encode the whole string
         $this->token = base64_encode(base64_encode(trim($certificate)).':'.trim($secret));

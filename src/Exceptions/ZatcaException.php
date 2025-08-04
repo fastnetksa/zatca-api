@@ -6,8 +6,15 @@ use Sevaske\ZatcaApi\Interfaces\ZatcaExceptionInterface;
 
 class ZatcaException extends \Exception implements ZatcaExceptionInterface
 {
-    public function __construct(string $message = '', protected array $context = [], int $code = 0, ?\Throwable $previous = null)
+    /**
+     * @var array
+     */
+    protected $context = [];
+
+    public function __construct(string $message = '', array $context = [], int $code = 0, ?\Throwable $previous = null)
     {
+        $this->context = $context;
+
         parent::__construct($message, $code, $previous);
     }
 
